@@ -1,8 +1,59 @@
+import { useState, useEffect } from 'react'
+import axios from 'axios';
+import { api } from '../constants'
+import { toast, ToastContainer } from 'react-toastify';
 
+function BankingDetails() {
+    const [loading, setLoading] = useState(false);
+    const [bankList, setBankList] = useState([]);
+    const [bank, setBank] = useState({
+        account_holder: "",
+        account_no: "",
+        bank_name: "",
+        branch_name: "",
+        bank_code: "",
+        swift_code: "",
+        bank_type: "",
+        recieve_address: ""
+    })
 
-export default function BankingDetails() {
+    useEffect(() => {
+        setLoading(true)
+        axios.get(`${api}/bank`)
+            .then(res => {
+                setBankList(res.data.banks)
+                setLoading(false)
+            })
+            .catch(err => {
+                setLoading(false)
+                toast.error(err.response.data.message)
+            })
+    }, [])
+
+    const addBankDetails = () => {
+        setLoading(true);
+        try {
+            axios.post(`${api}/bank`, bank)
+                .then(res => {
+                    if(res.data.status === "success"){
+                        toast.success(res.data.message)
+                        setBankList([...bankList, res.data.bank])
+                    }else{
+                        toast.warning(res.data.message)
+                    }
+                }).finally(() => {
+                    setLoading(false);
+                })
+
+        } catch (error) {
+            setLoading(false);
+            console.log(error);
+        }
+    }
+
     return (
         <div className="flex justify-center">
+            <ToastContainer />
             <div className="hero min-h-[90vh] bg-base-200 text-left items-start pt-5">
                 <div className="hero-content flex-col lg:flex-row-reverse items-start">
                     <div className="card w-[50%] bg-base-100 shadow-sm rounded-none justify-start flex text-left h-full">
@@ -19,46 +70,20 @@ export default function BankingDetails() {
                                             <th></th>
                                             <th>Holder</th>
                                             <th>Bank Name</th>
-                                            <th>Number</th>
+                                            <th>Account Number</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* <!-- row 1 --> */}
-                                        <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>HDFC</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr>
-                                        {/* <!-- row 2 --> */}
-                                        <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>UBI</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr>
-                                        {/* <!-- row 3 --> */}
-                                        <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>UBI</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr>
-                                        {/* <!-- row 3 --> */}
-                                        <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>UBI</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr>
-                                        {/* <!-- row 3 --> */}
-                                        <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>UBI</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr>
-                                        {/* <!-- row 3 --> */}
+
+                                        {bankList.length > 0 && bankList.map((bank, index) => (
+                                            <tr>
+                                                <th>{index+1}</th>
+                                                <td>{bank.account_holder}</td>
+                                                <td>{bank.bank_name}</td>
+                                                <td>{bank.account_no}</td>
+                                            </tr>
+                                        ))}
+                                       
 
                                     </tbody>
                                 </table>
@@ -75,54 +100,78 @@ export default function BankingDetails() {
                                 <label className="label">
                                     <span className="label-text">Account holder</span>
                                 </label>
-                                <input type="text" placeholder="Account holder" className="input input-bordered" />
+                                <input
+                                value={bank.account_holder}
+                                onChange={(e) => setBank({...bank, account_holder: e.target.value})}
+                                type="text" placeholder="Account holder" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Bank name</span>
                                 </label>
-                                <input type="text" placeholder="Bank name" className="input input-bordered" />
+                                <input 
+                                value={bank.bank_name}
+                                onChange={(e) => setBank({...bank, bank_name: e.target.value})}
+                                type="text" placeholder="Bank name" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Branch name</span>
                                 </label>
-                                <input type="text" placeholder="Branch name" className="input input-bordered" />
+                                <input
+                                value={bank.branch_name}
+                                onChange={(e) => setBank({...bank, branch_name: e.target.value})}
+                                type="text" placeholder="Branch name" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Bank code</span>
                                 </label>
-                                <input type="text" placeholder="Bank code" className="input input-bordered" />
+                                <input
+                                value={bank.bank_code}
+                                onChange={(e) => setBank({...bank, bank_code: e.target.value})}
+                                type="text" placeholder="Bank code" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Swift code</span>
                                 </label>
-                                <input type="text" placeholder="Swift code" className="input input-bordered" />
+                                <input
+                                value={bank.swift_code}
+                                onChange={(e) => setBank({...bank, swift_code: e.target.value})}
+                                type="text" placeholder="Swift code" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Bank type</span>
                                 </label>
-                                <input type="text" placeholder="Bank type" className="input input-bordered" />
+                                <input
+                                value={bank.bank_type}
+                                onChange={(e) => setBank({...bank, bank_type: e.target.value})}
+                                type="text" placeholder="Bank type" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Bank account number</span>
                                 </label>
-                                <input type="text" placeholder="Bank account number" className="input input-bordered" />
+                                <input
+                                value={bank.account_no}
+                                onChange={(e) => setBank({...bank, account_no: e.target.value})}
+                                type="text" placeholder="Bank account number" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Berry USDT TRC20 receive address.</span>
                                 </label>
-                                <input type="text" placeholder="Berry USDT TRC20 receive address." className="input input-bordered" />
+                                <input 
+                                value={bank.recieve_address}
+                                onChange={(e) => setBank({...bank, recieve_address: e.target.value})}
+                                type="text" placeholder="Berry USDT TRC20 receive address." className="input input-bordered" />
                             </div>
                             <div className="card-actions justify-end">
-                                <div className=" btn">
+                                <button onClick={addBankDetails} className=" btn">
                                     Add Beneficiary
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -131,3 +180,5 @@ export default function BankingDetails() {
         </div>
     );
 }
+
+export default BankingDetails;

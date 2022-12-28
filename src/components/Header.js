@@ -1,8 +1,20 @@
 import { useNavigate } from "react-router-dom";
-
+import { api } from '../constants';
+import axios from 'axios';
 
 export default function Header() {
+
     const navigate = useNavigate();
+
+    const logOut = () => {
+        localStorage.removeItem("user");
+        axios.get(`${api}/auth/logout`, {withCredentials: true})
+        .then((res) => {
+            if(res.data.status === "success"){
+                navigate("/login");
+            }
+        })
+    }
     return (
         <div>
             <div className="navbar bg-base-300 shadow-md">
@@ -71,7 +83,7 @@ export default function Header() {
                                     <span className="badge">New</span>
                                 </a>
                             </li> */}
-                            <li onClick={() => navigate("/login")}>
+                            <li onClick={logOut}>
                                 <a className="justify-between">
                                     Logout
                                     <span className="badge">New</span>

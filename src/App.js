@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {
   createBrowserRouter,
@@ -15,6 +14,7 @@ import IncomeStreams from './pages/IncomeStreams';
 import Payments from './pages/Payments';
 import Statements from './pages/Statements';
 import Contact from './pages/Contact';
+import Protected from './components/Protected';
 
 const router = createBrowserRouter([
   {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   //Subroutes
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: <Protected Component={Dashboard} />,
     children: [
       {
         path: "profile",

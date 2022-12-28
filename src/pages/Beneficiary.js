@@ -1,8 +1,64 @@
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import { api } from '../constants';
 
 export default function Beneficiary() {
+    const [loading, setLoading] = useState(false);
+    const [beneficiary, setBeneficiary] = useState({
+        name: "",
+        identification_no: "",
+        relationship: "",
+        email: "",
+        address: "",
+        contact: ""
+    });
+    const [beneficiaryList, setBeneficiaryList] = useState([]);
+
+    const onAddBeneficiary = async (e) => {
+        e.preventDefault();
+        try {
+            setLoading(true);
+            axios.post(`${api}/beneficiary`, beneficiary)
+                .then(res => {
+                    console.log(res.data);
+                    setLoading(false);
+                    if (res.data.status === "success") {
+                        toast.success(res.data.message);
+                        setBeneficiaryList([res.data.beneficiary, ...beneficiaryList])
+                    } else {
+                        toast.warning(res.data.message);
+                    }
+                })
+        } catch (err) {
+            setLoading(false);
+            console.log(err);
+        }
+    }
+
+
+
+    useEffect(() => {
+        try {
+            setLoading(true);
+            axios.get(`${api}/beneficiary`, { withCredentials: true })
+                .then(res => {
+                    console.log(res.data);
+                    setLoading(false);
+                    if (res.data.status === "success") {
+                        setBeneficiaryList(res.data.beneficiaries);
+                    }
+                })
+
+        } catch (err) {
+            setLoading(false);
+            console.log(err);
+        }
+    }, []);
+
     return (
         <div className="flex justify-center">
+            <ToastContainer />
             <div className="hero min-h-[90vh] bg-base-200 text-left items-start pt-20">
                 <div className="hero-content flex-col lg:flex-row-reverse items-start">
                     <div className="card w-[50%] bg-base-100 shadow-sm rounded-none justify-start flex text-left h-full">
@@ -24,28 +80,24 @@ export default function Beneficiary() {
                                     </thead>
                                     <tbody>
                                         {/* <!-- row 1 --> */}
-                                        <tr>
+                                        {beneficiaryList.length > 0 && beneficiaryList.map((ben, idx) => {
+                                            return (
+                                                <tr>
+                                                    <th>{idx+1}</th>
+                                                    <td>{ben.name}</td>
+                                                    <td>{ben.email}</td>
+                                                    <td>{ben.contact}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                        
+                                        {/* <tr>
                                             <th>1</th>
                                             <td>Cy Ganderton</td>
                                             <td>info@example.com</td>
                                             <td>+91 876-456-4566</td>
-                                        </tr>
-                                        {/* <!-- row 2 --> */}
-                                        <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>info@example.com</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr>
-                                        {/* <!-- row 3 --> */}
-                                        <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>info@example.com</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr>
-                                        {/* <!-- row 3 --> */}
-                                       
+                                        </tr> */}
+
                                     </tbody>
                                 </table>
                             </div>
@@ -61,42 +113,60 @@ export default function Beneficiary() {
                                 <label className="label">
                                     <span className="label-text">Full Name</span>
                                 </label>
-                                <input type="text" placeholder="Full Name" className="input input-bordered" />
+                                <input
+                                    value={beneficiary.name}
+                                    onChange={(e) => setBeneficiary({ ...beneficiary, name: e.target.value })}
+                                    type="text" placeholder="Full Name" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Identification Number</span>
                                 </label>
-                                <input type="text" placeholder="Identification Number" className="input input-bordered" />
+                                <input
+                                    value={beneficiary.identification_no}
+                                    onChange={(e) => setBeneficiary({ ...beneficiary, identification_no: e.target.value })}
+                                    type="text" placeholder="Identification Number" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Relationship</span>
                                 </label>
-                                <input type="text" placeholder="Relationship" className="input input-bordered" />
+                                <input
+                                    value={beneficiary.relationship}
+                                    onChange={(e) => setBeneficiary({ ...beneficiary, relationship: e.target.value })}
+                                    type="text" placeholder="Relationship" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Email address</span>
                                 </label>
-                                <input type="text" placeholder="Email address" className="input input-bordered" />
+                                <input
+                                    value={beneficiary.email}
+                                    onChange={(e) => setBeneficiary({ ...beneficiary, email: e.target.value })}
+                                    type="text" placeholder="Email address" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Residual Address</span>
                                 </label>
-                                <input type="text" placeholder="Residual Address" className="input input-bordered" />
+                                <input
+                                    value={beneficiary.address}
+                                    onChange={(e) => setBeneficiary({ ...beneficiary, address: e.target.value })}
+                                    type="text" placeholder="Residual Address" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Contact Number</span>
                                 </label>
-                                <input type="text" placeholder="Contact Number" className="input input-bordered" />
+                                <input
+                                    value={beneficiary.contact}
+                                    onChange={(e) => setBeneficiary({ ...beneficiary, contact: e.target.value })}
+                                    type="text" placeholder="Contact Number" className="input input-bordered" />
                             </div>
                             <div className="card-actions justify-end">
-                                <div className=" btn">
+                                <button onClick={onAddBeneficiary} className=" btn">
                                     Add Beneficiary
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>

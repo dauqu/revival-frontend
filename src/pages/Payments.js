@@ -1,5 +1,26 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { api } from "../constants";
+
 
 export default function Payments() {
+
+    const [payments, setPayments] = useState([]);
+    const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axios.get(`${api}/payments`, { withCredentials: true })
+            .then(res => {
+                console.log(res.data);
+                setPayments(res.data.payments);
+                setUser(res.data.user);
+                setLoading(false);
+            }
+            )
+            .catch(err => console.log(err))
+    }, [])
+
     return (
         <div className="hero">
             <div className="hero-content text-center flex flex-col">
@@ -24,8 +45,22 @@ export default function Payments() {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* <!-- row 1 --> */}
+                            {payments.length > 0 && payments.map((payment, index) => (
                             <tr className="hover">
+                                <th>{payment.level}</th>
+                                <td>{user.name}</td>
+                                <td>{payment.bank_name}</td>
+                                <td>${payment.amount}</td>
+                                <td>{payment.account_number}</td>
+                                <td>{new Date(payment.createdAt).toLocaleDateString()}</td>
+                                <td>
+                                    <span className="badge badge-success">
+                                        Success
+                                    </span>
+                                </td>
+                            </tr>
+                            ))}
+                            {/* <tr className="hover">
                                 <th>2</th>
                                 <td>Hart Hagerty</td>
                                 <td>State Bank Of India</td>
@@ -37,77 +72,7 @@ export default function Payments() {
                                         Success
                                     </span>
                                 </td>
-                            </tr>
-                            {/* <!-- row 2 --> */}
-                            <tr className="hover">
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>State Bank Of India</td>
-                                <td>$5997</td>
-                                <td>0000-0000-0000-0000</td>
-                                <td>12/09/2022</td>
-                                <td>
-                                    <span className="badge badge-success">
-                                        Success
-                                    </span>
-                                </td>
-                            </tr>
-                            {/* <!-- row 3 --> */}
-                            <tr className="hover">
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>State Bank Of India</td>
-                                <td>$5997</td>
-                                <td>0000-0000-0000-0000</td>
-                                <td>12/09/2022</td>
-                                <td>
-                                    <span className="badge badge-success">
-                                        Success
-                                    </span>
-                                </td>
-                            </tr>
-                            {/* <!-- row 3 --> */}
-                            <tr className="hover">
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>State Bank Of India</td>
-                                <td>$5997</td>
-                                <td>0000-0000-0000-0000</td>
-                                <td>12/09/2022</td>
-                                <td>
-                                    <span className="badge badge-success">
-                                        Success
-                                    </span>
-                                </td>
-                            </tr>
-                            {/* <!-- row 3 --> */}
-                            <tr className="hover">
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>State Bank Of India</td>
-                                <td>$5997</td>
-                                <td>0000-0000-0000-0000</td>
-                                <td>12/09/2022</td>
-                                <td>
-                                    <span className="badge badge-success">
-                                        Success
-                                    </span>
-                                </td>
-                            </tr>
-                            {/* <!-- row 3 --> */}
-                            <tr className="hover">
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>State Bank Of India</td>
-                                <td>$5997</td>
-                                <td>0000-0000-0000-0000</td>
-                                <td>12/09/2022</td>
-                                <td>
-                                    <span className="badge badge-success">
-                                        Success
-                                    </span>
-                                </td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
 
