@@ -1,9 +1,13 @@
+import { Outlet } from "react-router-dom";
+import Header from "../components/Header";
 
 
 export default function Dashboard() {
     return (
         <div>
-            <h1>Dashboard</h1>
+            <Header />
+            {/* Outlet */}
+            <Outlet />
         </div>
     );
 }
