@@ -3,7 +3,26 @@
 export default function Profile() {
     return (
         <div>
-            <h1>Profile</h1>
+            <div className="stats text-primary-content mt-10">
+
+                <div className="stat">
+                    <div className="stat-title">Account balance</div>
+                    <div className="stat-value">$89,400</div>
+                    <div className="stat-actions">
+                        <button className="btn btn-sm btn-success">Add funds</button>
+                    </div>
+                </div>
+
+                <div className="stat">
+                    <div className="stat-title">Current balance</div>
+                    <div className="stat-value">$89,400</div>
+                    <div className="stat-actions">
+                        <button className="btn btn-sm">Withdrawal</button>
+                        <button className="btn btn-sm">deposit</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     );
 }
