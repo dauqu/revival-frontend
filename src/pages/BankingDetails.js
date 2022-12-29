@@ -19,21 +19,24 @@ function BankingDetails() {
 
     useEffect(() => {
         setLoading(true)
-        axios.get(`${api}/bank`)
+        axios.get(`${api}/bank`, { withCredentials: true })
             .then(res => {
-                setBankList(res.data.banks)
-                setLoading(false)
+                if(res.data.status === "success"){
+                    setBankList(res.data.banks)
+                    setLoading(false)
+                }
             })
             .catch(err => {
                 setLoading(false)
-                toast.error(err.response.data.message)
+                console.log(err);
+                toast.error(err)
             })
     }, [])
 
     const addBankDetails = () => {
         setLoading(true);
         try {
-            axios.post(`${api}/bank`, bank)
+            axios.post(`${api}/bank`, bank, {withCredentials: true})
                 .then(res => {
                     if(res.data.status === "success"){
                         toast.success(res.data.message)

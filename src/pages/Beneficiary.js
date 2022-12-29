@@ -19,7 +19,7 @@ export default function Beneficiary() {
         e.preventDefault();
         try {
             setLoading(true);
-            axios.post(`${api}/beneficiary`, beneficiary)
+            axios.post(`${api}/beneficiary`, beneficiary, {withCredentials: true})
                 .then(res => {
                     console.log(res.data);
                     setLoading(false);
