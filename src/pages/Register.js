@@ -23,7 +23,7 @@ export default function Register() {
             return toast.error("Passwords do not match");
         }
         try {
-            axios.post(`${api}/auth/register`, user)
+            axios.post(`${api}/register`, user)
                 .then(res => {
                     // console.log(res.data);
                     if (res.data.status === "success") {
