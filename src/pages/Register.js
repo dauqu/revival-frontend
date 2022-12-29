@@ -109,7 +109,7 @@ export default function Register() {
                                     <input
                                         value={user.password}
                                         onChange={e => setUser({ ...user, password: e.target.value })}
-                                        type="text" placeholder="Password" className="input input-bordered" />
+                                        type="password" placeholder="Password" className="input input-bordered" />
                                 </div>
                                 <div className="form-control">
                                     <label className="label">
@@ -118,7 +118,7 @@ export default function Register() {
                                     <input
                                         value={user.repeatPassword}
                                         onChange={e => setUser({ ...user, repeatPassword: e.target.value })}
-                                        type="text" placeholder="Repeat Password" className="input input-bordered" />
+                                        type="password" placeholder="Repeat Password" className="input input-bordered" />
                                 </div>
                             </div>
                             <div className="form-control">
@@ -128,7 +128,7 @@ export default function Register() {
                                 <input
                                     value={user.referal}
                                     onChange={e => setUser({ ...user, referal: e.target.value })}
-                                    type="text" placeholder="Repeat Password" className="input input-bordered" />
+                                    type="text" placeholder="Referal ID (Optional)" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
