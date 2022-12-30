@@ -14,7 +14,6 @@ export default function Register() {
         password: "",
         repeatPassword: "",
         referal: "",
-        level: 1
     });
 
     const onRegister = () => {
@@ -130,23 +129,10 @@ export default function Register() {
                                     onChange={e => setUser({ ...user, referal: e.target.value })}
                                     type="text" placeholder="Referal ID (Optional)" className="input input-bordered" />
                             </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Select Level</span>
-                                </label>
-                                <select className="select select-bordered"
-                                defaultValue={1}
-                                 onChange={e => setUser({ ...user, level: e.target.value })}>
-                                    <option disabled>Pick one</option>
-                                    <option value={1}>Level 1</option>
-                                    <option value={2}>Level 2</option>
-                                    <option value={3}>Level 3</option>
-                                    <option value={4}>Level 4</option>
-                                    <option value={5}>Level 5</option>
-                                </select>
-                            </div>
                             <div className="form-control mt-6">
-                                <button className="btn btn-primary" onClick={onRegister}>Register</button>
+                                <button className="btn btn-primary" onClick={onRegister}>
+                                    Register
+                                </button>
                             </div>
                         </div>
                     </div>
