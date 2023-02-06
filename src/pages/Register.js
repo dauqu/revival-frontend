@@ -5,6 +5,7 @@ import { api } from "../constants";
 import { Link } from "react-router-dom";
 
 export default function Register() {
+    const [loading, setLoading] = useState(false);
 
     const [user, setUser] = useState({
         name: "",
@@ -18,6 +19,7 @@ export default function Register() {
     });
 
     const onRegister = () => {
+        setLoading(true);
         console.log(user);
         if (user.password !== user.repeatPassword) {
             return toast.error("Passwords do not match");
@@ -34,11 +36,14 @@ export default function Register() {
                     } else {
                         toast.info(res.data.message);
                     }
+                    setLoading(false);
                 }).catch((error) => {
+                    setLoading(false);
                     console.log(error);
                 })
         } catch (error) {
             toast.error(error.message);
+            setLoading(false);
         }
 
     }
@@ -131,13 +136,13 @@ export default function Register() {
                                     type="text" placeholder="Referal ID (Optional)" className="input input-bordered" />
                             </div>
                             <div className="form-control mt-6">
-                                <button className="btn btn-primary" onClick={onRegister}>
-                                    Register
+                                <button className={`${loading && "loading"} btn btn-primary`} onClick={onRegister}>
+                                    {loading ? "Loading..." : "Register"}
                                 </button>
                             </div>
                             <div className="flex items-center justify-center">
                                 <span className="text-base label-text-alt link link-hover">Already have an account ?</span>
-                                <Link to='/login' className='text-base text-accent-focus ml-3'>Login</Link>
+                                <Link to='/login' className="text-base text-accent-focus ml-3">Login</Link>
                             </div>
 
                         </div>

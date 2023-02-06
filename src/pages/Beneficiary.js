@@ -3,8 +3,29 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { api } from '../constants';
 
+
 export default function Beneficiary() {
     const [loading, setLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    function useOutsideAlerter(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    setShowModal(false);
+                }
+            }
+
+            // Bind the event listener
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => document.removeEventListener("mousedown", handleClickOutside);
+
+        }, [ref]);
+    }
+
+    const modalRef = React.useRef();
+    useOutsideAlerter(modalRef);
+
     const [beneficiary, setBeneficiary] = useState({
         name: "",
         identification_no: "",
@@ -45,12 +66,14 @@ export default function Beneficiary() {
                 .then(res => {
                     console.log(res.data);
                     setLoading(false);
+                    setShowModal(false);
                     if (res.data.status === "success") {
                         setBeneficiaryList(res.data.beneficiaries);
                     }
                 })
-
-        } catch (err) {
+                
+            } catch (err) {
+            setShowModal(false);
             setLoading(false);
             console.log(err);
         }
@@ -59,78 +82,84 @@ export default function Beneficiary() {
     return (
         <div className="flex justify-center">
             <ToastContainer />
-            <div className="min-h-[100vh] w-screen bg-base-200 text-left py-10">
-                <div className="flex flex-row justify-evenly items-start px-6 gap-x-[20px]">
-                    <div className="bg-base-100 shadow-sm rounded-none h-full max-md:hidden md:w-[35%]">
-                        <figure className="p-5">
-                            {/* Add ben heading */}
-                            <h1 className="card-title">Add Beneficiary</h1>
-                        </figure>
-                        <div className="card-body w-full">
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Full Name</span>
-                                </label>
-                                <input
-                                    value={beneficiary.name}
-                                    onChange={(e) => setBeneficiary({ ...beneficiary, name: e.target.value })}
-                                    type="text" placeholder="Full Name" className="input input-bordered" />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Identification Number</span>
-                                </label>
-                                <input
-                                    value={beneficiary.identification_no}
-                                    onChange={(e) => setBeneficiary({ ...beneficiary, identification_no: e.target.value })}
-                                    type="text" placeholder="Identification Number" className="input input-bordered" />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Relationship</span>
-                                </label>
-                                <input
-                                    value={beneficiary.relationship}
-                                    onChange={(e) => setBeneficiary({ ...beneficiary, relationship: e.target.value })}
-                                    type="text" placeholder="Relationship" className="input input-bordered" />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Email address</span>
-                                </label>
-                                <input
-                                    value={beneficiary.email}
-                                    onChange={(e) => setBeneficiary({ ...beneficiary, email: e.target.value })}
-                                    type="text" placeholder="Email address" className="input input-bordered" />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Residual Address</span>
-                                </label>
-                                <input
-                                    value={beneficiary.address}
-                                    onChange={(e) => setBeneficiary({ ...beneficiary, address: e.target.value })}
-                                    type="text" placeholder="Residual Address" className="input input-bordered" />
-                            </div>
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Contact Number</span>
-                                </label>
-                                <input
-                                    value={beneficiary.contact}
-                                    onChange={(e) => setBeneficiary({ ...beneficiary, contact: e.target.value })}
-                                    type="text" placeholder="Contact Number" className="input input-bordered" />
-                            </div>
-                            <div className="card-actions justify-end">
-                                <button onClick={onAddBeneficiary} className=" btn">
-                                    Add Beneficiary
-                                </button>
+            <div className="min-h-[100vh] w-full bg-base-200 text-left py-10">
+                <div className="flex flex-row justify-evenly items-start px-5">
+                    {showModal ? 
+                    (<div className={` w-full flex z-40 fixed left-0 top-0 bg-black bg-opacity-10 min-h-screen justify-center items-center`}>
+                        <div className="overflow-y-scroll h-[90vh] md:h-auto bg-base-100 shadow-sm rounded-none w-[80%] md:w-[40%] " ref={modalRef}>
+                            <figure className="p-5">
+                                <h1 className="card-title">Add Beneficiary</h1>
+                            </figure>
+                            <div className="card-body w-full ">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Full Name</span>
+                                    </label>
+                                    <input
+                                        value={beneficiary.name}
+                                        onChange={(e) => setBeneficiary({ ...beneficiary, name: e.target.value })}
+                                        type="text" placeholder="Full Name" className="input input-bordered" />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Identification Number</span>
+                                    </label>
+                                    <input
+                                        value={beneficiary.identification_no}
+                                        onChange={(e) => setBeneficiary({ ...beneficiary, identification_no: e.target.value })}
+                                        type="text" placeholder="Identification Number" className="input input-bordered" />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Relationship</span>
+                                    </label>
+                                    <input
+                                        value={beneficiary.relationship}
+                                        onChange={(e) => setBeneficiary({ ...beneficiary, relationship: e.target.value })}
+                                        type="text" placeholder="Relationship" className="input input-bordered" />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Email address</span>
+                                    </label>
+                                    <input
+                                        value={beneficiary.email}
+                                        onChange={(e) => setBeneficiary({ ...beneficiary, email: e.target.value })}
+                                        type="text" placeholder="Email address" className="input input-bordered" />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Residual Address</span>
+                                    </label>
+                                    <input
+                                        value={beneficiary.address}
+                                        onChange={(e) => setBeneficiary({ ...beneficiary, address: e.target.value })}
+                                        type="text" placeholder="Residual Address" className="input input-bordered" />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Contact Number</span>
+                                    </label>
+                                    <input
+                                        value={beneficiary.contact}
+                                        onChange={(e) => setBeneficiary({ ...beneficiary, contact: e.target.value })}
+                                        type="text" placeholder="Contact Number" className="input input-bordered" />
+                                </div>
+                                <div className="card-actions justify-end">
+                                    <button onClick={onAddBeneficiary} className=" btn">
+                                        Add Beneficiary
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="bg-base-100 shadow-sm rounded-none justify-start flex w-[100%] md:w-[65%] text-left h-full">
-                        <figure className="p-5">
+                    </div>) : null}
+
+                    <div className="bg-base-100 shadow-sm rounded-none justify-start flex flex-col w-[100%] md:w-[65%] text-left h-full">
+                        <figure className="flex p-4 px-6 justify-between">
                             <h1 className="card-title">List of Beneficiary</h1>
+                            <button className='btn btn-sm block' onClick={() => {
+                                setShowModal(true);
+                            }}>Add Beneficiary</button>
                         </figure>
                         <div className="card-body">
                             <div className="overflow-x-auto w-full">
@@ -144,7 +173,6 @@ export default function Beneficiary() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* <!-- row 1 --> */}
                                         {beneficiaryList.length > 0 && beneficiaryList.map((ben, idx) => {
                                             return (
                                                 <tr>
@@ -155,14 +183,6 @@ export default function Beneficiary() {
                                                 </tr>
                                             )
                                         })}
-
-                                        {/* <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>info@example.com</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr> */}
-
                                     </tbody>
                                 </table>
                             </div>
