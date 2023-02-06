@@ -15,11 +15,12 @@ import Payments from './pages/Payments';
 import Statements from './pages/Statements';
 import Contact from './pages/Contact';
 import Protected from './components/Protected';
+import Home from './pages/Home';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello world!</div>,
+    element: <Home />,
   },
   {
     path: "/login",

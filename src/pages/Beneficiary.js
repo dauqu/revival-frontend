@@ -19,7 +19,7 @@ export default function Beneficiary() {
         e.preventDefault();
         try {
             setLoading(true);
-            axios.post(`${api}/beneficiary`, beneficiary, {withCredentials: true})
+            axios.post(`${api}/beneficiary`, beneficiary, { withCredentials: true })
                 .then(res => {
                     console.log(res.data);
                     setLoading(false);
@@ -59,51 +59,9 @@ export default function Beneficiary() {
     return (
         <div className="flex justify-center">
             <ToastContainer />
-            <div className="hero min-h-[90vh] bg-base-200 text-left items-start pt-20">
-                <div className="hero-content flex-col lg:flex-row-reverse items-start">
-                    <div className="card w-[50%] bg-base-100 shadow-sm rounded-none justify-start flex text-left h-full">
-                        <figure className="p-5">
-                            {/* Add ben heading */}
-                            <h1 className="card-title">List of Beneficiary</h1>
-                        </figure>
-                        <div className="card-body">
-                            <div className="overflow-x-auto w-full">
-                                <table className="table table-zebra w-full">
-                                    {/* <!-- head --> */}
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Number</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {/* <!-- row 1 --> */}
-                                        {beneficiaryList.length > 0 && beneficiaryList.map((ben, idx) => {
-                                            return (
-                                                <tr>
-                                                    <th>{idx+1}</th>
-                                                    <td>{ben.name}</td>
-                                                    <td>{ben.email}</td>
-                                                    <td>{ben.contact}</td>
-                                                </tr>
-                                            )
-                                        })}
-                                        
-                                        {/* <tr>
-                                            <th>1</th>
-                                            <td>Cy Ganderton</td>
-                                            <td>info@example.com</td>
-                                            <td>+91 876-456-4566</td>
-                                        </tr> */}
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card w-[50%] bg-base-100 shadow-sm rounded-none h-full">
+            <div className="min-h-[100vh] w-screen bg-base-200 text-left py-10">
+                <div className="flex flex-row justify-evenly items-start px-6 gap-x-[20px]">
+                    <div className="bg-base-100 shadow-sm rounded-none h-full max-md:hidden md:w-[35%]">
                         <figure className="p-5">
                             {/* Add ben heading */}
                             <h1 className="card-title">Add Beneficiary</h1>
@@ -170,6 +128,47 @@ export default function Beneficiary() {
                             </div>
                         </div>
                     </div>
+                    <div className="bg-base-100 shadow-sm rounded-none justify-start flex w-[100%] md:w-[65%] text-left h-full">
+                        <figure className="p-5">
+                            <h1 className="card-title">List of Beneficiary</h1>
+                        </figure>
+                        <div className="card-body">
+                            <div className="overflow-x-auto w-full">
+                                <table className="table table-zebra w-full">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Number</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {/* <!-- row 1 --> */}
+                                        {beneficiaryList.length > 0 && beneficiaryList.map((ben, idx) => {
+                                            return (
+                                                <tr>
+                                                    <th>{idx + 1}</th>
+                                                    <td>{ben.name}</td>
+                                                    <td>{ben.email}</td>
+                                                    <td>{ben.contact}</td>
+                                                </tr>
+                                            )
+                                        })}
+
+                                        {/* <tr>
+                                            <th>1</th>
+                                            <td>Cy Ganderton</td>
+                                            <td>info@example.com</td>
+                                            <td>+91 876-456-4566</td>
+                                        </tr> */}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

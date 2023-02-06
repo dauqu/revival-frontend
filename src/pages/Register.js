@@ -2,6 +2,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useState } from "react";
 import axios from "axios";
 import { api } from "../constants";
+import { Link } from "react-router-dom";
 
 export default function Register() {
 
@@ -43,7 +44,7 @@ export default function Register() {
     }
 
     return (
-        <div className="min-h-screen w-full bg-base-200">
+        <div className="min-h-screen flex items-center justify-center w-full bg-base-200">
             <ToastContainer theme="dark" />
             <div className="hero ">
                 <div className="hero-content flex-col xl:flex-row-reverse">
@@ -134,6 +135,11 @@ export default function Register() {
                                     Register
                                 </button>
                             </div>
+                            <div className="flex items-center justify-center">
+                                <span className="text-base label-text-alt link link-hover">Already have an account ?</span>
+                                <Link to='/login' className='text-base text-accent-focus ml-3'>Login</Link>
+                            </div>
+
                         </div>
                     </div>
                 </div>
